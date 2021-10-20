@@ -1,23 +1,40 @@
-var createError = require('http-errors');
-var express = require('express');
-var session = require('express-session');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const express = require('express');
+// We will require express-ejs-layouts for our views
+const expressLayout = require('express-ejs-layouts');
+// We need to bring in mongoose for our databse
+const mongoose = require('mongoose');
+const flash = require('connect-flash');
+const session = require('express-session');
 const passport = require('passport');
-var loginRouter = require('./routes/login');
-var createAccountRouter = require('./routes/createAccount');
-var submitRouter = require('./routes/submit');
-var loginSubmitRouter = require('./routes/loginSubmit');
-var dashboardRouter = require('./routes/dashboard.js');
 
-var app = express();
+const app = express();
+const query = require('./config/query');
 
-
-//passport config
+// Passport config
 require('./config/passport')(passport);
 
-var session_config = {
+// DB Config
+const db = require('./models/database').db;
+
+/*
+// Connect to Mongo
+mongoose.connect(db, { useNewUrlParser: true })
+    // This gives us a promise, so will do .then() once connection is successful
+    // and .catch() to catch the error and print it out in the console
+    .then(() => console.log('MongoDB Connected..'))
+    .catch(err => console.log(err))
+*/
+
+
+// Middleware EJS
+app.use(expressLayout);
+app.set('view engine', 'ejs');
+
+// Bodyparser Middleware
+app.use(express.urlencoded({ extended: false }));
+
+// Express Session middleware
+const session_config = {
 		secret: 'secret', //a random unique string key used to authenticate a session
 		resave: true, //nables the session to be stored back to the session store, even if the session was never modified during the request
 		saveUninitialized: true, //his allows any uninitialized session to be sent to the store. When a session is created but not modified, it is referred to as uninitialized.
@@ -26,48 +43,30 @@ var session_config = {
 };
 
 session_config.cookie.secure = false;
-//IMPORTANT REVIEW IN CLASS - https://expressjs.com/en/resources/middleware/session.html
+// IMPORTANT REVIEW IN CLASS - https://expressjs.com/en/resources/middleware/session.html
 
-//Express Sessions
-app.use(session(session_config))
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'hbs');
+// Express Sessions
+app.use(session(session_config));
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
-
-//Passport middleware
+// Passport Middleware
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/', loginRouter);
-app.use('/createAccount', createAccountRouter);
-app.use('/submit', submitRouter);
-app.use('/loginSubmit', loginSubmitRouter);
-app.use('/dashboard', dashboardRouter);
+// Connect flash middleware
+app.use(flash());
 
-
-
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+// Global Vars for flash color messges
+app.use((req, res, next) => {
+    res.locals.success_msg = req.flash('success_msg');
+    res.locals.error_msg = req.flash('error_msg');
+    res.locals.error = req.flash('error');
+    next();
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+// Routes
+app.use('/', require('./routes/index'));
+app.use('/users', require('./routes/users'));
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
+const PORT = process.env.PORT || 3000;
 
-module.exports = app;
+app.listen(PORT, console.log(`Server started on port ${PORT}`));

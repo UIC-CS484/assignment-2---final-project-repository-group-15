@@ -1,42 +1,53 @@
-const LocalStrategy = require('passport-local').Strategy;
-let users = require('../users.json');
+const LocalStrategy = require("passport-local").Strategy;
+const db = require("../models/database").db;
+const bcrypt = require("bcrypt");
+const query = require("./query");
 
+// Load User Model
+const User = require("../models/User");
 
-module.exports = function(passport) {
-console.log("Passport Function triggered");
-//Passport pulls the the name variables from the name attribute in login form.  If different, you need to use whats on lines 10 and 11
-passport.use(new LocalStrategy({
-	usernameField: 'email',
-	passwordField: 'password'
-}, function(username, password, done) {
-	console.log(username);
-	//Search users.json file to see if user exist
+module.exports = function (passport) {
+  passport.use(
+    new LocalStrategy(
+      {
+        usernameField: "email",
+        passwordField: "password",
+      },
+      (email, password, done) => {
+        // Match User
+        db.get(query.GET_ACCOUNT, email, (err, row) => {
+          if (err) {
+            throw err;
+          } else if (!row) {
+            // Email not found
+            return done(null, false, {
+              message: "That email is not registered",
+            });
+          } else {
+            // Email exists in databse
+            bcrypt.compare(password, row.password, (err, isMatch) => {
+              if (err) throw err;
 
+              if (isMatch) {
+                return done(null, row);
+              } else {
+                return done(null, false, { message: "Password incorrect" });
+              }
+            });
+          }
+        });
+      }
+    )
+  );
 
-    //let users = JSON.parse(dataStore);
-    console.log(users);
+  passport.serializeUser((user, done) => {
+    done(null, user.name);
+  });
 
-    for (var index = 0; index < users.length; ++index) {
-
-        var user = users[index];
-       console.log(user.email);
-        if(user.email == username && user.password == password){
-			
-          done(null, user);
-        }
-        else{
-          done(null, false);
-        }
-    }
-    
-}));
-
-passport.serializeUser(function(user, done) {
-	done(null, user); 
-});
-
-passport.deserializeUser(function(user, done) {
-	done(null, user); //you can access with req.user
-});
-
-}
+  passport.deserializeUser((name, done) => {
+    db.get(query.GET_NAME, name, (err, user) => {
+      console.log(user);
+      done(err, user);
+    });
+  });
+};
