@@ -105,3 +105,5 @@ dist
 
 # Custom Secret
 keys.js
+.prettierrc
+.vscode
