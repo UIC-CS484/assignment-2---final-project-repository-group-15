@@ -1,13 +1,14 @@
 // We will use express, so we bring that in with require
-const express = require('express')
-const User = require('../models/User')
+const express = require('express');
+const User = require('../models/User');
 const bcrypt = require('bcrypt')
 const passport = require('passport')
 
 const router = express.Router()
 
 // User model
-const user = require('../models/User')
+const query= require('../config/query');
+const db = require('../models/database').db;
 
 // Login Page
 router.get('/login',(req,res,next)=>{ res.render('login') })
@@ -48,53 +49,44 @@ router.post('/register',(req, res) =>{
     }
     else{
         // Validation passed
-        User.findOne({ email: email })
-            .then(user => {
-                if(user) {
-                    // User exists
-                    errors.push({ msg: 'Email is already regsitered' })
-                    res.render('register', {
-                    errors,
-                    name,
-                    email,
-                    password,
-                    password2
-                    })
-
-                } else{
-                    // User is not system hence, create a new user
-                    const newUser = new User({
-                        name,
-                        email,
-                        password
-                    });
-                    // Hash Password
-                    bcrypt.genSalt(10, (err, salt) => 
-                        bcrypt.hash(newUser.password, salt, (err, hash) => {
-                            if(err) throw err
-                            // Set password to hashed password
-                            newUser.password = hash
-                            // Save user in db
-                            newUser.save()
-                            // Gives us a promise
-                                // if it worked, then() will give us the user
-                                .then(user => {
-                                    // We want to redirect to login
-                                    // But before we want to display the messages using flash
-                                    req.flash('success_msg', 'You are now registered and can login')
-                                    res.redirect('/users/login')
-                                })
-                                .catch(err => console.log(err))
+        // Hash Password
+        
+        bcrypt.genSalt(10, (err, salt) => 
+                        bcrypt.hash(req.body.password, salt, (err, hash) => {
+                            if(err) {
+                                throw err;
+                            } else {
+                                // Set password to hashed password
+                                const params = [req.body.name, req.body.email, hash];
+                                console.log(hash);                                
+                                // Save user in db
+                                db.run(query.INSERT_ACCOUNT, params, (dbErr, row) => {
+                                    // User exists
+                                    if(dbErr) {
+                                        errors.push({ msg: 'Email is already regsitered' });
+                                        res.render('register', {
+                                        errors,
+                                        name,
+                                        email,
+                                        password,
+                                        password2
+                                        });
+                                    } else {
+                                        // User was not system hence, created it.
+                                        // We want to redirect to login
+                                        // But before we want to display the messages using flash
+                                        req.flash('success_msg', 'You are now registered and can login');
+                                        res.redirect('/users/login');
+                                    }
+                                });
+                            }
                         })
-                    )
-                    console.log(newUser)
-                    //res.send('new user')
-                }
-            })
+                    );
+                    //console.log(params);
         // res.send('pass')
     }
     //console.log(req.body)
-})
+});
 
 // Login handle
 router.post('/login', (req, res, next) => {

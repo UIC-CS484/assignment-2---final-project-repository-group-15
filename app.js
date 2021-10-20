@@ -1,33 +1,37 @@
-const express = require('express')
+const express = require('express');
 // We will require express-ejs-layouts for our views
-const expressLayout = require('express-ejs-layouts')
+const expressLayout = require('express-ejs-layouts');
 // We need to bring in mongoose for our databse
-const mongoose = require('mongoose')
-const flash = require('connect-flash')
-const session = require('express-session')
-const passport = require('passport')
+const mongoose = require('mongoose');
+const flash = require('connect-flash');
+const session = require('express-session');
+const passport = require('passport');
 
-const app = express()
+const app = express();
+const query = require('./config/query');
 
 // Passport config
-require('./config/passport')(passport)
+require('./config/passport')(passport);
 
 // DB Config
-const db = require('./config/keys').MongoURI
+const db = require('./models/database').db;
 
+/*
 // Connect to Mongo
 mongoose.connect(db, { useNewUrlParser: true })
     // This gives us a promise, so will do .then() once connection is successful
     // and .catch() to catch the error and print it out in the console
     .then(() => console.log('MongoDB Connected..'))
     .catch(err => console.log(err))
+*/
+
 
 // Middleware EJS
-app.use(expressLayout)
-app.set('view engine', 'ejs')
+app.use(expressLayout);
+app.set('view engine', 'ejs');
 
 // Bodyparser Middleware
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: false }));
 
 // Express Session middleware
 const session_config = {
@@ -42,27 +46,27 @@ session_config.cookie.secure = false;
 // IMPORTANT REVIEW IN CLASS - https://expressjs.com/en/resources/middleware/session.html
 
 // Express Sessions
-app.use(session(session_config))
+app.use(session(session_config));
 
 // Passport Middleware
-app.use(passport.initialize())
-app.use(passport.session())
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Connect flash middleware
-app.use(flash())
+app.use(flash());
 
 // Global Vars for flash color messges
 app.use((req, res, next) => {
-    res.locals.success_msg = req.flash('success_msg')
-    res.locals.error_msg = req.flash('error_msg')
-    res.locals.error = req.flash('error')
-    next()
-})
+    res.locals.success_msg = req.flash('success_msg');
+    res.locals.error_msg = req.flash('error_msg');
+    res.locals.error = req.flash('error');
+    next();
+});
 
 // Routes
-app.use('/', require('./routes/index'))
-app.use('/users', require('./routes/users'))
+app.use('/', require('./routes/index'));
+app.use('/users', require('./routes/users'));
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, console.log(`Server started on port ${PORT}`))
+app.listen(PORT, console.log(`Server started on port ${PORT}`));
