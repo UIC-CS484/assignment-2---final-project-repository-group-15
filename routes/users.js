@@ -3,6 +3,8 @@ const express = require("express");
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const passport = require("passport");
+// This middleware will check if
+const { ensureAuthenticated } = require("../config/auth");
 
 const router = express.Router();
 
@@ -12,12 +14,21 @@ const db = require("../models/database").db;
 
 // Login Page
 router.get("/login", (req, res, next) => {
-  res.render("login");
+  if (req.isAuthenticated()) {
+    res.redirect("/dashboard");
+  } else {
+    res.render("login");
+  }
 });
 
 // Register Page
-router.get("/register", (req, res, next) => {
-  res.render("register");
+router.get("/register", (req, res) => {
+  if (req.isAuthenticated()) {
+    res.redirect("/dashboard");
+  } else {
+    console.log("Rendering register page");
+    res.render("register");
+  }
 });
 
 // Register Handle
