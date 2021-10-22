@@ -1,5 +1,5 @@
 "use strict";
-
+const bcrypt = require("bcrypt");
 const query = require("../config/query");
 const db = require("../config/sqlite3").db;
 
@@ -34,7 +34,7 @@ module.exports.dashboard = (req, res) => {
     });
   }
   req.flash("error_msg", "Please login to view this resource");
-  return res.redirect("users/login");
+  return res.redirect("login");
 };
 
 // Register Handle

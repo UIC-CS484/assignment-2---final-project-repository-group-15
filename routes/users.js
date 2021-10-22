@@ -1,6 +1,5 @@
 // We will use express, so we bring that in with require
 const express = require("express");
-const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const passport = require("../config/passport");
 // This middleware will check if
@@ -18,6 +17,9 @@ router.get("/login", userController.login);
 
 // Register Page
 router.get("/register", userController.register);
+
+// Dashboard Page
+router.get("/dashboard", userController.dashboard);
 
 // Register Handle
 router.post("/register", userController.createUser);
