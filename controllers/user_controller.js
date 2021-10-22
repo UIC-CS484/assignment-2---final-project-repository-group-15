@@ -37,6 +37,17 @@ module.exports.dashboard = (req, res) => {
   return res.redirect("login");
 };
 
+// Render the 404 page
+module.exports.notFound = (req, res) => {
+  if (req.isAuthenticated()) {
+    return res.render("dashboard", {
+      name: req.user.name,
+    });
+  }
+  req.flash("error_msg", "How did you found your self here?");
+  return res.render("welcome.ejs");
+};
+
 // Register Handle
 module.exports.createUser = (req, res) => {
   // Pulling some variables from req.body
@@ -123,4 +134,24 @@ module.exports.logout = (req, res) => {
   req.logout();
   req.flash("success_msg", "You are logged out");
   res.redirect("/");
+};
+
+module.exports.deleteUser = (req, res) => {
+  console.log("Inside controller");
+  var name = req.user.name;
+  req.logout();
+  //console.log(`User: ${req.user.name}`);
+  db.run(query.DELETE_ACCOUNT, name, (dbErr, row) => {
+    if (dbErr) {
+      errors.push({ msg: "User does not exists!" });
+      res.redirect("/");
+    } else {
+      // User was not system hence, created it.
+      // We want to redirect to login
+      // But before we want to display the messages using flash
+      console.log("Inside else now");
+      //req.flash("success_msg", "Account successfully deleted!");
+      res.redirect("/");
+    }
+  });
 };

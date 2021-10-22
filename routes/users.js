@@ -35,8 +35,14 @@ router.post(
   userController.createSession
 );
 
+// Delete account handle
+router.get("/delete", userController.deleteUser);
+
 // Logout handle
 router.get("/logout", userController.logout);
+
+// 404 Page
+router.get("*", userController.notFound);
 
 // This module.exports will allow us to use router.get() somewhere else(in other .js file)
 module.exports = router;

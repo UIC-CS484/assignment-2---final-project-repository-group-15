@@ -8,16 +8,10 @@ const userController = require("../controllers/user_controller");
 
 // Welcome page
 router.get("/", userController.welcome);
-// Dashboard Page
-/**
-router.get("/users/dashboard", ensureAuthenticated, (req, res) =>
-  res.render("dashboard", {
-    name: req.user.name,
-  })
-);
-*/
 // User page
 router.use("/users", require("./users"));
+// 404 page
+router.get("*", userController.notFound);
 
 // This module.exports will allow us to use router.get() somewhere else(in other .js file)
 module.exports = router;
