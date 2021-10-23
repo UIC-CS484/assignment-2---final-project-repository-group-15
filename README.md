@@ -2,17 +2,13 @@
 
 Checkout our application: [Click Here](https://tinyurl.com/npa8tsyj)
 
-## Team Workflow Strategy
-
-We are using feature-driven development to commit our work. We have one `main` branch and one `skeleton` branch. To implement a new feature in our project or squash some bugs, we pull from the `skeleton` branch and once the task is finished we commit the changes and push it into a new branch.
-
-Using Discord, we notify our team members about the changes. After peer review, we merge the new branch with the `skeleton` branch.
-
-After our weekly in-person team discussion and extensive testing, we merge the `skeleton` branch with the `main` branch.
-
-Thus `main` is our release branch and `skeleton` is our staging branch.
-
-We use GitHub project tools to track our overall progress, task assigning.
+## Testing
+The current unit tests check password and email validity. These guarantee the user is correctly registering and logging in. They are tested in pairs, with one checking a correct input and should return true if the test passes, and the other checking incorrect values, which should return false if the test passes.
+ - The first two tests check password length, and make sure it is at least 6 characters long.
+ - The next two test password matching during registration.
+ - The next two check for an @ character in an email.
+ - Finally, the last two ensure that the email has a valid ending, such as ".com".
+In future iterations, additional tests may test inputs in various ways against a database of user information. Tests may also check if the implentation of APIs is being performed correctly.
 
 ## Team Members
 
@@ -30,9 +26,3 @@ We use GitHub project tools to track our overall progress, task assigning.
 
 - [smoram2@uic.edu](smoram2@uic.edu)
 - [https://github.com/SaiNirmalMorampudi](https://github.com/SaiNirmalMorampudi)
-
-## Development Tools
-
-⇥ **Visual Studio Code** - Code Editor
-
-⇥ **Postman** - For testing API
