@@ -1,6 +1,7 @@
 # Transport Suggestion
 
 ## Running the project
+- Download the application as Zip Folder or clone the repository
 - goto app.js file, to install the dependencies use 
 ```
  npm install
