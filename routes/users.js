@@ -2,8 +2,6 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 const passport = require("../config/passport");
-// This middleware will check if
-const { ensureAuthenticated } = require("../config/auth");
 
 const router = express.Router();
 const userController = require("../controllers/user_controller");

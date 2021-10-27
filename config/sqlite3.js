@@ -1,6 +1,7 @@
 const sqlite3 = require("sqlite3").verbose();
 const query = require("../config/query");
-const DBSOURCE = "../mock.db";
+const path = require("path");
+const DBSOURCE = path.join(__dirname, "../db/mock.db");
 
 let db = new sqlite3.Database(DBSOURCE, (err) => {
   if (err) {
