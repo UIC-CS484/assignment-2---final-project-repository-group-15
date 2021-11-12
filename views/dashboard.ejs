@@ -81,3 +81,43 @@
     Welcome <%= name %>!
   </p>
 </div>
+<form action="/users/submit" method="POST">
+  <section class="p-5">
+    <div class="container">
+      <div class="row text-centre g-4">
+        <div class="col-md">
+          <div class="card bg-dark text-light">
+            <div class="card-body text-center">
+              <h3 class="card-title mb-3">Destination</h3>
+              <div class="input-group destination-input">
+                <input type="text" class="form-control" placeholder="Enter Destination" name="cityName"/>
+                <!-- <button class="btn btn-secondary btn-lg " type="submit">Submit</button> -->
+                <label for="source">Source</label>
+        <input id="source" type="text" name="travelSource">
+        <br>
+        <label for="destination">Destination</label>
+        <input id="destination" type="text" name="travelDestination">
+        <button type="submit">submit</button>
+                
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  </form> 
+
+  <!-- <body>
+    <form action="/users/submit" method="post">
+        <label for="source">Source</label>
+        <input id="source" type="text" name="travelSource">
+        <br>
+        <label for="destination">Destination</label>
+        <input id="destination" type="text" name="travelDestination">
+        <button type="submit">submit</button>
+    </form>
+    
+</body> -->

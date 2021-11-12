@@ -42,5 +42,11 @@ router.get("/logout", userController.logout);
 // 404 Page
 router.get("*", userController.notFound);
 
+//API calls
+router.post("/submit",userController.submit);
+
+// //API call for cCTA
+// router.post('/go',userController.getTimes);
+
 // This module.exports will allow us to use router.get() somewhere else(in other .js file)
 module.exports = router;
