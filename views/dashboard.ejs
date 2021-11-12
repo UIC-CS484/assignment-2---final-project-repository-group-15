@@ -22,7 +22,7 @@
             class="dropdown-menu dropdown-menu-end dropdown-menu-lg-end"
             aria-labelledby="dropdown04"
           >
-            <li><a class="btn" class="dropdown-item" href="#">Account</a></li>
+            <li><a class="btn" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#updatePasswordModal" href="#">Account</a></li>
             <li>
               <a href="/users/delete" class="btn" class="dropdown-item"
                 >Modify Account</a
@@ -39,6 +39,45 @@
     </div>
   </div>
 </nav>
-<p class="lead mb-3" style="margin-top: 5rem; font-size: 50px">
-  Welcome <%= name %>!
-</p>
+<!--Modal for Password change-->
+<div
+  class="modal fade"
+  id="updatePasswordModal"
+  tabindex="-1"
+  aria-labelledby="updatePasswordModal"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updatePasswordModal">Change Password</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="new-password" class="col-form-label"
+              >New Password</label
+            >
+            <input type="text" class="form-control" id="new-password" />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary">Update Password</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+  <p class="lead mb-3" style="margin-top: 5rem; font-size: 50px">
+    Welcome <%= name %>!
+  </p>
+</div>
