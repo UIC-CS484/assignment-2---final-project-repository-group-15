@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const query = require("../config/query");
 const db = require("../config/sqlite3").db;
 const https = require("https");
+require("dotenv").config();
 
 // Render the welcome page
 module.exports.welcome = (req, res) => {
@@ -159,9 +160,18 @@ module.exports.deleteUser = (req, res) => {
 //weather API
 module.exports.submit = function (req, res) {
   const query = req.body.cityName;
-  const appKey = "06a1dc9b9a352e1c0603985edec712d4";
+  const wAPIKey = process.env.WEATHER_API_KEY;
+  console.log(wAPIKey);
+  //const appKey = "06a1dc9b9a352e1c0603985edec712d4";
   const measureUnits = "metric";
-  const url = "https://api.openweathermap.org/data/2.5/weather?" + "q=" + query + "&appid=" + appKey + "&units=" + measureUnits;
+  const url =
+    "https://api.openweathermap.org/data/2.5/weather?" +
+    "q=" +
+    query +
+    "&appid=" +
+    wAPIKey +
+    "&units=" +
+    measureUnits;
   let temp = "";
   let weatherDescripton = " ";
   let imageUrl = " ";
@@ -178,7 +188,7 @@ module.exports.submit = function (req, res) {
   let trainDataDestination = " ";
   let mapIdentiferDestination = " ";
   let mapIdDestination = " ";
-  let appKey1 = " ";
+  let ctaAPIKey = " ";
   let url1Source = " ";
   let getRnsource = " ";
   let rnTrainSource = " ";
@@ -208,15 +218,49 @@ module.exports.submit = function (req, res) {
       // res.write("<img src=" + imageUrl + ">");
       //res.end();
       // res.render("apiData",{queryCity:query,queryTemperature:temp,weatherDescriptonTemperature:weatherDescripton,imageIcon:imageUrl})
-    })
+    });
     //})
-
 
     //CTA API
 
-
-
-    blueLine = ["Forest Park", "Harlem", "Oak Park", "Austin", "Central", "Cicero", "Kostner", "Pulaski", "Kedzie-Homan", "California", "Western", "Illinois Medical District", "Racine", "UIC-Halsted", "Clinton", "LaSalle", "Jackson", "Monroe", "Washington", "Clark/lake", "Grand", "Chicago", "Divison", "Damen", "Western", "California", "Logan Square", "Belmont", "Addison", "Irving Park", "Montrose", "Jefferson Park", "Harlem", "Cumberland", "Rosemont", "O'Hare"];
+    blueLine = [
+      "Forest Park",
+      "Harlem",
+      "Oak Park",
+      "Austin",
+      "Central",
+      "Cicero",
+      "Kostner",
+      "Pulaski",
+      "Kedzie-Homan",
+      "California",
+      "Western",
+      "Illinois Medical District",
+      "Racine",
+      "UIC-Halsted",
+      "Clinton",
+      "LaSalle",
+      "Jackson",
+      "Monroe",
+      "Washington",
+      "Clark/lake",
+      "Grand",
+      "Chicago",
+      "Divison",
+      "Damen",
+      "Western",
+      "California",
+      "Logan Square",
+      "Belmont",
+      "Addison",
+      "Irving Park",
+      "Montrose",
+      "Jefferson Park",
+      "Harlem",
+      "Cumberland",
+      "Rosemont",
+      "O'Hare",
+    ];
     // var stationName = req.body.travelSource;
     // var destinationName = req.body.travelDestination;
     // var trDr = 0;
@@ -248,13 +292,15 @@ module.exports.submit = function (req, res) {
     if (blueLine.indexOf(stationName) > blueLine.indexOf(destinationName)) {
       //res.write("");
       trDr = 5;
-    }
-    else {
+    } else {
       trDr = 1;
       //res.write("");
     }
 
-    urlSource = "https://data.cityofchicago.org/resource/8pix-ypme.json?" + "station_name=" + stationName;
+    urlSource =
+      "https://data.cityofchicago.org/resource/8pix-ypme.json?" +
+      "station_name=" +
+      stationName;
     https.get(urlSource, function (response) {
       response.on("data", function (data) {
         trainDataSource = JSON.parse(data);
@@ -266,34 +312,40 @@ module.exports.submit = function (req, res) {
             //res.write(trainData[index].map_id);
             break;
           }
-
         }
         mapIdSource = mapIdentiferSource; //Identifying Mapid
 
         // getting destination map id
-        urlDestination = "https://data.cityofchicago.org/resource/8pix-ypme.json?" + "station_name=" + destinationName;
+        urlDestination =
+          "https://data.cityofchicago.org/resource/8pix-ypme.json?" +
+          "station_name=" +
+          destinationName;
         https.get(urlDestination, function (response) {
           response.on("data", function (data) {
             trainDataDestination = JSON.parse(data);
             //code to get mapid for blue=ture
             mapIdentiferDestination = "";
             for (let index in trainDataDestination) {
-
               if (trainDataDestination[index].blue) {
                 mapIdentiferDestination = trainDataDestination[index].map_id;
                 //res.write(trainData[index].map_id);
                 break;
               }
-
             }
-            mapIdDestination = mapIdentiferDestination;//ends here
+            mapIdDestination = mapIdentiferDestination; //ends here
             //console.log(mapIdDestination);
-            appKey1 = "75fc11dc6cb84224a21a82c48b133ce3";
+            ctaAPIKey = process.env.CTA_API_KEY;
 
-            url1Source = "https://lapi.transitchicago.com/api/1.0/ttarrivals.aspx?" + "key=" + appKey1 + "&mapid=" + mapIdSource + "&rt=blue&outputType=JSON";
+            url1Source =
+              "https://lapi.transitchicago.com/api/1.0/ttarrivals.aspx?" +
+              "key=" +
+              ctaAPIKey +
+              "&mapid=" +
+              mapIdSource +
+              "&rt=blue&outputType=JSON";
             https.get(url1Source, function (response) {
               response.on("data", function (data) {
-                getRnsource = JSON.parse(data);//using mapId from trainData to get route number(rn)
+                getRnsource = JSON.parse(data); //using mapId from trainData to get route number(rn)
                 var routNumber = " ";
                 for (let index in getRnsource.ctatt.eta) {
                   if (trDr == getRnsource.ctatt.eta[index].trDr) {
@@ -301,8 +353,14 @@ module.exports.submit = function (req, res) {
                     break;
                   }
                 }
-                rnTrainSource = routNumber;//getting route number[0] as the earliest train's r is displayed first
-                url2 = "https://lapi.transitchicago.com/api/1.0/ttfollow.aspx?" + "key=" + appKey1 + "&runnumber=" + rnTrainSource + "&outputType=JSON";
+                rnTrainSource = routNumber; //getting route number[0] as the earliest train's r is displayed first
+                url2 =
+                  "https://lapi.transitchicago.com/api/1.0/ttfollow.aspx?" +
+                  "key=" +
+                  ctaAPIKey +
+                  "&runnumber=" +
+                  rnTrainSource +
+                  "&outputType=JSON";
                 https.get(url2, function (response) {
                   response.on("data", function (data) {
                     getSource = JSON.parse(data);
@@ -319,30 +377,50 @@ module.exports.submit = function (req, res) {
                     }
 
                     //dest map id processing and getting dest time
-                    url1Destination = "https://lapi.transitchicago.com/api/1.0/ttarrivals.aspx?" + "key=" + appKey1 + "&mapid=" + mapIdDestination + "&rt=blue&outputType=JSON";
+                    url1Destination =
+                      "https://lapi.transitchicago.com/api/1.0/ttarrivals.aspx?" +
+                      "key=" +
+                      ctaAPIKey +
+                      "&mapid=" +
+                      mapIdDestination +
+                      "&rt=blue&outputType=JSON";
                     https.get(url1Destination, function (response) {
                       response.on("data", function (data) {
-                        getRndestination = JSON.parse(data);//using mapId from trainData to get route number(rn)
+                        getRndestination = JSON.parse(data); //using mapId from trainData to get route number(rn)
                         //var routNumberdestination = " ";
                         for (let index in getRndestination.ctatt.eta) {
-                          if (rnTrainSource == getRnsource.ctatt.eta[index].rn) {
-                            routNumberdestination = getRnsource.ctatt.eta[index].rn;
+                          if (
+                            rnTrainSource == getRnsource.ctatt.eta[index].rn
+                          ) {
+                            routNumberdestination =
+                              getRnsource.ctatt.eta[index].rn;
                             break;
                           }
                         }
-                        rnTrainDestination = routNumberdestination;//getting route number[0] as the earliest train's r is displayed first
-                        console.log(" The train RN are looking for " + rnTrainDestination);
+                        rnTrainDestination = routNumberdestination; //getting route number[0] as the earliest train's r is displayed first
+                        console.log(
+                          " The train RN are looking for " + rnTrainDestination
+                        );
                         //get destination arrival time
-                        urlDesat = "https://lapi.transitchicago.com/api/1.0/ttfollow.aspx?" + "key=" + appKey1 + "&runnumber=" + rnTrainDestination + "&outputType=JSON";
+                        urlDesat =
+                          "https://lapi.transitchicago.com/api/1.0/ttfollow.aspx?" +
+                          "key=" +
+                          ctaAPIKey +
+                          "&runnumber=" +
+                          rnTrainDestination +
+                          "&outputType=JSON";
                         https.get(urlDesat, function (response) {
                           response.on("data", function (data) {
                             arrivalDestination = JSON.parse(data);
                             checkBoolean = false;
                             sourceDestination = "not available as of now";
                             for (let index in arrivalDestination.ctatt.eta) {
-
-                              if (arrivalDestination.ctatt.eta[index].staNm === destinationName) {
-                                sourceDestination = arrivalDestination.ctatt.eta[index].arrT;
+                              if (
+                                arrivalDestination.ctatt.eta[index].staNm ===
+                                destinationName
+                              ) {
+                                sourceDestination =
+                                  arrivalDestination.ctatt.eta[index].arrT;
                                 //res.write("<h1>The Arrival Time at Destination " + destinationName + " is " + sourceDestination + "</h1>");
                                 // res.render("apiData",{destinationstnArrival:destinationName,destinationArrTime:sourceDestination})
                                 // res.end();
@@ -350,31 +428,38 @@ module.exports.submit = function (req, res) {
                                 break;
                               }
                             }
-                            console.log(temp,weatherDescripton,sourceArrival,query,stationName);
-    return res.render("apiData", { queryCity: query, queryTemperature: temp, weatherDescriptonTemperature: weatherDescripton, imageIcon: imageUrl, sourcestnArrival: stationName, sourceArrTime: sourceArrival, destinationstnArrival: destinationName, destinationArrTime: sourceDestination });
-                          })
-                        })
-
-
-                      })
-                    })
-
-                  })
-                })
-
-              })
-            })
-
-          })
-
-        })
-      })
-    })
+                            console.log(
+                              temp,
+                              weatherDescripton,
+                              sourceArrival,
+                              query,
+                              stationName
+                            );
+                            return res.render("apiData", {
+                              queryCity: query,
+                              queryTemperature: temp,
+                              weatherDescriptonTemperature: weatherDescripton,
+                              imageIcon: imageUrl,
+                              sourcestnArrival: stationName,
+                              sourceArrTime: sourceArrival,
+                              destinationstnArrival: destinationName,
+                              destinationArrTime: sourceDestination,
+                            });
+                          });
+                        });
+                      });
+                    });
+                  });
+                });
+              });
+            });
+          });
+        });
+      });
+    });
     // console.log(obj.temp,weatherDescripton,sourceArrival,query,stationName);
     // return res.render("apiData", { queryCity: query, queryTemperature: temp, weatherDescriptonTemperature: weatherDescripton, imageIcon: imageUrl, sourcestnArrival: stationName, sourceArrTime: sourceArrival, destinationstnArrival: destinationName, destinationArrTime: sourceDestination });
-  })
+  });
 
   //return res.render("apiData", { queryCity: query, queryTemperature: temp, weatherDescriptonTemperature: weatherDescripton, imageIcon: imageUrl, sourcestnArrival: stationName, sourceArrTime: sourceArrival, destinationstnArrival: destinationName, destinationArrTime: sourceDestination });
-
-}
-
+};
