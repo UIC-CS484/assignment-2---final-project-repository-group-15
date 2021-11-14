@@ -5,6 +5,7 @@ const QUERY = {
   GET_PASSWORD: "SELECT password from user WHERE email = ?",
   INSERT_ACCOUNT: "INSERT INTO user (name, email, password) VALUES (?,?,?)",
   DELETE_ACCOUNT: "DELETE from user WHERE name = ?",
+  UPDATE_PASSWORD: "UPDATE user SET password = ? WHERE name = ?",
   CREATE_USER_TABLE:
     "CREATE TABLE IF NOT EXISTS user (email text PRIMARY KEY UNIQUE, password text, name text, CONSTRAINT email_unique UNIQUE (email))",
 };

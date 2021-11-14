@@ -58,22 +58,24 @@
           aria-label="Close"
         ></button>
       </div>
-      <div class="modal-body">
-        <form>
-          <div class="mb-3">
-            <label for="new-password" class="col-form-label"
-              >New Password</label
-            >
-            <input type="text" class="form-control" id="new-password" />
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary">Update Password</button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          Close
-        </button>
-      </div>
+      <form action="/users/change-password" method="post">
+        <div class="modal-body">
+          
+            <div class="mb-3">
+              <label for="new-password" class="col-form-label"
+                >New Password</label
+              >
+              <input type="password" minlength="6" class="form-control" id="newPassword" name="newPassword" />
+            </div>
+          
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Update Password</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Close
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

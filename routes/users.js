@@ -33,17 +33,20 @@ router.post(
   userController.createSession
 );
 
+// Update Password Handle
+router.post("/change-password", userController.changePassword);
+
 // Delete account handle
 router.get("/delete", userController.deleteUser);
 
 // Logout handle
 router.get("/logout", userController.logout);
 
+//API calls
+router.post("/submit", userController.submit);
+
 // 404 Page
 router.get("*", userController.notFound);
-
-//API calls
-router.post("/submit",userController.submit);
 
 // //API call for cCTA
 // router.post('/go',userController.getTimes);

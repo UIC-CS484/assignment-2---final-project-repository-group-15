@@ -157,6 +157,53 @@ module.exports.deleteUser = (req, res) => {
     }
   });
 };
+
+// Update password handle
+module.exports.changePassword = (req, res) => {
+  console.log("Inside change_pass controller");
+  var newPass = req.body.newPassword;
+  var name = req.user.name;
+  // For validation let us first create an error array
+  let errors = [];
+
+  // Check if new password is empty
+  if (!newPass) {
+    errors.push({ msg: "Please fill the new password" });
+  }
+
+  // Check passsword length
+  if (newPass.length < 6) {
+    errors.push({ msg: "Password should be at least 6 characters" });
+  }
+
+  if (errors.length > 0) {
+    console.log("Implement Password Change error handling");
+    res.render("login");
+  } else {
+    // Validation Passed
+    // Hash Password
+    bcrypt.genSalt(10, (err, salt) =>
+      bcrypt.hash(newPass, salt, (err, hash) => {
+        if (err) {
+          throw err;
+        } else {
+          console.log(hash);
+          db.run(query.UPDATE_PASSWORD, hash, name, (dbErr, row) => {
+            // Db Error Check
+            if (dbErr) {
+              errors.push({ msg: "Db Error During Password Update" });
+              res.render("login");
+            } else {
+              console.log("Password Updated Successfully");
+              res.redirect("/dashboard");
+            }
+          });
+        }
+      })
+    );
+  }
+};
+
 //weather API
 module.exports.submit = function (req, res) {
   const query = req.body.cityName;
