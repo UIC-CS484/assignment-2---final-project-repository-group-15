@@ -211,28 +211,29 @@ module.exports.changePassword = (req, res) => {
 
 //weather API
 module.exports.submit = function (req, res) {
-  const query = req.body.cityName;
+  let errors = [];
+  const query1 = req.body.cityName;
 
   //add search to DB
-  db.run(query.ADD_SEARCH, query, req.body.email, (dbErr, row) => {
+  db.run(query.ADD_SEARCH, query1, req.body.email, (dbErr, row) => {
     if (dbErr) {
       errors.push({ msg: "couldn't add search" });
     }
   });
-  db.run(query.ADD_SEARCHCOUNT, query, req.body.email, (dbErr, row) => {
+  db.run(query.ADD_SEARCHCOUNT, query1, req.body.email, (dbErr, row) => {
     if (dbErr) {
       errors.push({ msg: "couldn't increment search count" });
     }
   });
 
   const wAPIKey = process.env.WEATHER_API_KEY;
-  console.log(wAPIKey);
+  // console.log(wAPIKey);
   //const appKey = "06a1dc9b9a352e1c0603985edec712d4";
   const measureUnits = "metric";
   const url =
     "https://api.openweathermap.org/data/2.5/weather?" +
     "q=" +
-    query +
+    query1 +
     "&appid=" +
     wAPIKey +
     "&units=" +
@@ -257,12 +258,12 @@ module.exports.submit = function (req, res) {
 
   let destinationName = req.body.travelDestination;
 
-  db.run(query.ADD_SEARCH, travelDestination, req.body.email, (dbErr, row) => {
+  db.run(query.ADD_SEARCH, destinationName, req.body.email, (dbErr, row) => {
     if (dbErr) {
       errors.push({ msg: "couldn't add search" });
     }
   });
-  db.run(query.ADD_SEARCHCOUNT, travelDestination, req.body.email, (dbErr, row) => {
+  db.run(query.ADD_SEARCHCOUNT, destinationName, req.body.email, (dbErr, row) => {
     if (dbErr) {
       errors.push({ msg: "couldn't increment search count" });
     }
@@ -398,6 +399,7 @@ module.exports.submit = function (req, res) {
         for (let index in trainDataSource) {
           if (trainDataSource[index].blue) {
             mapIdentiferSource = trainDataSource[index].map_id;
+            console.log(mapIdentiferSource);
             //res.write(trainData[index].map_id);
             break;
           }
@@ -424,7 +426,6 @@ module.exports.submit = function (req, res) {
             mapIdDestination = mapIdentiferDestination; //ends here
             //console.log(mapIdDestination);
             ctaAPIKey = process.env.CTA_API_KEY;
-
             url1Source =
               "https://lapi.transitchicago.com/api/1.0/ttarrivals.aspx?" +
               "key=" +
@@ -457,8 +458,10 @@ module.exports.submit = function (req, res) {
                     //sourceArrival=" ";
                     //console.log(sourceStn);
                     for (let index in sourceStn) {
+
                       if (sourceStn[index].staNm === stationName) {
                         sourceArrival = sourceStn[index].arrT;
+                        
                         // res.write("<h1>The Arrival Time at Source " + stationName + " is " + sourceArrival + "</h1>");
                         // res.render("apiData",{sourestnArrival:stationName,sourceArrTime:sourceArrival});
                         break;
@@ -521,11 +524,11 @@ module.exports.submit = function (req, res) {
                               temp,
                               weatherDescripton,
                               sourceArrival,
-                              query,
+                              query1,
                               stationName
                             );
                             return res.render("apiData", {
-                              queryCity: query,
+                              queryCity: query1,
                               queryTemperature: temp,
                               weatherDescriptonTemperature: weatherDescripton,
                               imageIcon: imageUrl,
