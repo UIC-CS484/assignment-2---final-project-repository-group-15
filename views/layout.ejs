@@ -13,6 +13,8 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+    </script>
 
     <title>Transport Suggestor</title>
   </head>
@@ -34,5 +36,113 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
     -->
+    <script>
+      // var getMin=[];
+      // var getMax=[];
+      
+  
+  
+      var dates = [];
+      // var results=[];
+      for (var i = 0; i < 7; i++) {
+        var d = new Date();
+        d.setDate(d.getDate() + i);
+        var date = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+        dates.push(date)
+      }
+  
+      var mintempArray = new Array();
+      var getSevenDates = new Array();
+      var maxtempArray=new Array();
+  
+      async function getData() {
+        let weatherData = await fetch("https://api.openweathermap.org/data/2.5/onecall?lat=41.85&lon=-87.65&exclude=hourly,current,minutely,alerts&appid=06a1dc9b9a352e1c0603985edec712d4&units=metric");
+        let parsedData = await weatherData.json();
+        let daily = parsedData.daily;
+        for (var i = 0; i < 7; i++) {
+          mintempArray.push(daily[i].temp.min);
+        }
+        for( var i=0;i<7;i++){
+          maxtempArray.push(daily[i].temp.max);
+        }
+  
+        //       var date= new Array();
+        //       var hours=new Array();
+        //       var minutes= new Array();
+        //       var seconds= new Array();
+        //       var formattedTime =new Array();
+        //       for( var i=0;i<7;i++)
+        //       {
+        //  date[i] = new Date(getSevenDates[i] * 1000);
+        // // Hours part from the timestamp
+        //  hours[i] = date[i].getHours();
+        // // Minutes part from the timestamp
+        //  minutes[i] = "0" + date[i].getMinutes();
+        // // Seconds part from the timestamp
+        //  seconds[i] = "0" + date[i].getSeconds();
+  
+        // // Will display time in 10:30:23 format
+        //  formattedTime[i] = hours[i] + ':' + minutes[i].substr(-2) + ':' + seconds[i].substr(-2);
+        //       }
+  
+  
+  
+        var xValues = dates;
+        var yValues = mintempArray;
+        var barColors = ["red", "green","blue","orange","pink","yellow","brown"];
+  
+        new Chart("myChart1", {
+          type: "bar",
+          data: {
+            labels: xValues,
+            datasets: [{
+              backgroundColor: barColors,
+              data: yValues
+            }]
+          },
+          options: {
+            legend: {
+              display: false
+            },
+            title: {
+              display: true,
+              text: "Min temp in chicago"
+            },
+            responsive: true,
+            maintainAspectRatio: false
+          }
+        });
+        var xValues = dates;
+        var yValues = maxtempArray;
+        var barColors = ["red", "green","blue","orange","pink","yellow",'brown'];
+  
+        new Chart("myChart2", {
+          type: "bar",
+          data: {
+            labels: xValues,
+            datasets: [{
+              backgroundColor: barColors,
+              data: yValues
+            }]
+          },
+          options: {
+            legend: {
+              display: false
+            },
+            title: {
+              display: true,
+              text: "Max temperature in chicago"
+            },
+            responsive: true,
+            maintainAspectRatio: false
+          }
+        });
+      }
+      getData();
+    </script>
+  
+  </body>
+  
+  </html>
   </body>
 </html>
