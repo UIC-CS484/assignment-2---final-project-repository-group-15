@@ -222,7 +222,20 @@ module.exports.changePassword = (req, res) => {
 module.exports.submit = function (req, res) {
   try {
     if (req.isAuthenticated()) {
-      const query = req.body.cityName;
+      const query1 = req.body.cityName;
+
+      //add search to DB
+      db.run(query.ADD_SEARCH, query1, req.body.email, (dbErr, row) => {
+        if (dbErr) {
+          errors.push({ msg: "couldn't add search" });
+        }
+      });
+      db.run(query.ADD_SEARCHCOUNT, query1, req.body.email, (dbErr, row) => {
+        if (dbErr) {
+          errors.push({ msg: "couldn't increment search count" });
+        }
+      });
+
       const wAPIKey = process.env.WEATHER_API_KEY;
       console.log(wAPIKey);
       //const appKey = "06a1dc9b9a352e1c0603985edec712d4";
@@ -230,7 +243,7 @@ module.exports.submit = function (req, res) {
       const url =
         "https://api.openweathermap.org/data/2.5/weather?" +
         "q=" +
-        query +
+        query1 +
         "&appid=" +
         wAPIKey +
         "&units=" +
@@ -241,7 +254,31 @@ module.exports.submit = function (req, res) {
       let icon = " ";
       let weatherData = " ";
       let stationName = req.body.travelSource;
+
+      db.run(query.ADD_SEARCH, stationName, req.body.email, (dbErr, row) => {
+        if (dbErr) {
+          errors.push({ msg: "couldn't add search" });
+        }
+      });
+      db.run(query.ADD_SEARCHCOUNT, stationName, req.body.email, (dbErr, row) => {
+        if (dbErr) {
+          errors.push({ msg: "couldn't increment search count" });
+        }
+      });
+
       let destinationName = req.body.travelDestination;
+
+      db.run(query.ADD_SEARCH, destinationName, req.body.email, (dbErr, row) => {
+        if (dbErr) {
+          errors.push({ msg: "couldn't add search" });
+        }
+      });
+      db.run(query.ADD_SEARCHCOUNT, destinationName, req.body.email, (dbErr, row) => {
+        if (dbErr) {
+          errors.push({ msg: "couldn't increment search count" });
+        }
+      });
+
       let trDr = 0;
       let urlSource = "";
       let trainDataSource = " ";
@@ -471,11 +508,11 @@ module.exports.submit = function (req, res) {
                                   temp,
                                   weatherDescripton,
                                   sourceArrival,
-                                  query,
+                                  query1,
                                   stationName
                                 );
                                 return res.render("apiData", {
-                                  queryCity: query,
+                                  queryCity: query1,
                                   queryTemperature: temp,
                                   weatherDescriptonTemperature: weatherDescripton,
                                   imageIcon: imageUrl,
