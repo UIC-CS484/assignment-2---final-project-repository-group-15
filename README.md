@@ -13,7 +13,8 @@ npm start
 ```
 - once the server is running go to http://localhost:3000/
 
-
+## ERD Diagram
+<img width="393" alt="database" src="https://user-images.githubusercontent.com/40325698/142331723-dee419e4-00e2-4725-8629-ddfc27af19b0.PNG">
 
 ## Testing
 Unit tests will be written for most forms of user input. Whenever functionality that could change the state of the website or database is added, at least 1 appropriate pair of tests will be added to check validity. The current unit tests check password and email validity. These guarantee the user is correctly registering and logging in. They are tested in pairs, with one checking a correct input and should return true if the test passes, and the other checking incorrect values, which should return false if the test passes.
