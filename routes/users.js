@@ -13,6 +13,9 @@ const query = require("../config/query");
 // Login Page
 router.get("/login", userController.login);
 
+//Chart
+router.get("/chart", userController.chart);
+
 // Register Page
 router.get("/register", userController.register);
 
