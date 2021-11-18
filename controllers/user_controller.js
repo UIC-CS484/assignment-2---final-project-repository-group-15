@@ -220,6 +220,7 @@ module.exports.changePassword = (req, res) => {
 //weather API
 
 module.exports.submit = function (req, res) {
+  let errors = [];
   try {
     if (req.isAuthenticated()) {
       const query1 = req.body.cityName;
