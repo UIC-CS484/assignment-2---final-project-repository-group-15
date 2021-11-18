@@ -14,6 +14,7 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
     console.log("Connected to SQLite databse.");
     // Create user table
     db.run(query.CREATE_USER_TABLE);
+    db.run(query.CREATE_HISTORY_TABLE);
   }
 });
 

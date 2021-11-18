@@ -105,6 +105,11 @@ module.exports.createUser = (req, res) => {
                 password2,
               });
             } else {
+              db.run(query.INSERT_HISTORY, req.body.email, (dbErr, row) => {
+                if (dbErr) {
+                  errors.push({ msg: "couldn't insert into history" });
+                }
+              });
               // User was not system hence, created it.
               // We want to redirect to login
               // But before we want to display the messages using flash
@@ -207,6 +212,19 @@ module.exports.changePassword = (req, res) => {
 //weather API
 module.exports.submit = function (req, res) {
   const query = req.body.cityName;
+
+  //add search to DB
+  db.run(query.ADD_SEARCH, query, req.body.email, (dbErr, row) => {
+    if (dbErr) {
+      errors.push({ msg: "couldn't add search" });
+    }
+  });
+  db.run(query.ADD_SEARCHCOUNT, query, req.body.email, (dbErr, row) => {
+    if (dbErr) {
+      errors.push({ msg: "couldn't increment search count" });
+    }
+  });
+
   const wAPIKey = process.env.WEATHER_API_KEY;
   console.log(wAPIKey);
   //const appKey = "06a1dc9b9a352e1c0603985edec712d4";
@@ -225,7 +243,31 @@ module.exports.submit = function (req, res) {
   let icon = " ";
   let weatherData = " ";
   let stationName = req.body.travelSource;
+
+  db.run(query.ADD_SEARCH, stationName, req.body.email, (dbErr, row) => {
+    if (dbErr) {
+      errors.push({ msg: "couldn't add search" });
+    }
+  });
+  db.run(query.ADD_SEARCHCOUNT, stationName, req.body.email, (dbErr, row) => {
+    if (dbErr) {
+      errors.push({ msg: "couldn't increment search count" });
+    }
+  });
+
   let destinationName = req.body.travelDestination;
+
+  db.run(query.ADD_SEARCH, travelDestination, req.body.email, (dbErr, row) => {
+    if (dbErr) {
+      errors.push({ msg: "couldn't add search" });
+    }
+  });
+  db.run(query.ADD_SEARCHCOUNT, travelDestination, req.body.email, (dbErr, row) => {
+    if (dbErr) {
+      errors.push({ msg: "couldn't increment search count" });
+    }
+  });
+
   let trDr = 0;
   let urlSource = "";
   let trainDataSource = " ";
