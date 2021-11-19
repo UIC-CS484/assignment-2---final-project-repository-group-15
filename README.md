@@ -18,6 +18,7 @@ npm start
 ## ERD Diagram
 <img width="393" alt="database" src="https://user-images.githubusercontent.com/40325698/142331723-dee419e4-00e2-4725-8629-ddfc27af19b0.PNG">
 - Bolded attributes are NOT-NULL, non-bolded attributes may be NULL.
+
 ## API Calling
 - We are making calls to few API to get data regarding, weather and arrival time of various CTA blue line trains. We are getting the the weather data from OpenWeatherMap API.
 - The user will input the station he/she is at and the station the user wants to visit and will hit the submit button. Then will display the arrival and drop off times for that route. The user can also find weather description,temperature  of a particualr city.
