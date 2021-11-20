@@ -41,8 +41,8 @@
   </div>
 </nav>
 
-<div class="card border-primary mb-3" style="max-width: 18rem;">
-    <!-- <div class="card-header">Header</div> -->
+<!-- <div class="card border-primary mb-3" style="max-width: 18rem;">
+     <div class="card-header">Header</div>
     <div class="card-body text-primary">
       <h3 class="card-title">Weather report in <%=queryCity%> </h3>
       <p class="card-text">
@@ -52,26 +52,70 @@
         
       </p>
     </div>
-  </div>
-  <div class="card border-secondary mb-3" style="max-width: 18rem;">
-    <!-- <div class="card-header">Header</div> -->
+  </div> -->
+  <!-- <div class="card border-secondary mb-3" style="max-width: 18rem;">
+    <div class="card-header">Header</div>
     <div class="card-body text-secondary">
-      <!-- <h5 class="card-title">Secondary card title</h5> -->
+      <h5 class="card-title">Secondary card title</h5>
       <p class="card-text">
         <h1> The Arrival Time at Source <%=sourcestnArrival%>  is   <%=sourceArrTime%> </h1>
       </p>
     </div>
   </div>
   <div class="card border-secondary mb-3" style="max-width: 18rem;">
-    <!-- <div class="card-header">Header</div> -->
+    <div class="card-header">Header</div>
     <div class="card-body text-secondary">
-      <!-- <h5 class="card-title">Secondary card title</h5> -->
+      <h5 class="card-title">Secondary card title</h5>
       <p class="card-text">
-        <h1> The Arrival Time at Source <%=destinationstnArrival%>  is   <%=destinationArrTime%> </h1>
+        <h1> The Arrival Time at Destination <%=destinationstnArrival%>  is   <%=destinationArrTime%> </h1>
       </p>
+    </div>
+  </div> -->
+  
+  <div class="card-group mx-auto" style="margin-top: 10rem;" >
+    <div class="card">
+      
+      
+      <div class="card-body card bg-dark text-light">
+        
+        <h5 class="card-title"><div class="box" style="display: flex; justify-content: center; align-items: center;">
+  
+          <i class="fas fa-cloud fa-2x" ></i>
+          
+          </div></h5>
+        <p class="card-text" style="text-align: center;">
+          Temperature in <%=queryCity%> is <%=queryTemperature%> degree celsius
+          weather description:  <%=weatherDescriptonTemperature%> 
+          <img src='<%=imageIcon%>'  >
+          
+        </p>
+      </div> 
+      <!-- <div class="card-footer">
+        <small class="text-muted" style="display: flex; justify-content: center; align-items: center;" ><input id="source" type="text" name="cityName" placeholder="City Name" style="text-align: center;"></small>
+      </div> -->
+    </div>
+    <div class="card">
+      <div class="card-body card bg-dark text-light">
+        <h5 class="card-title"><div class="box" style="display: flex; justify-content: center; align-items: center;">
+  
+          <i class="fas fa-train fa-2x" ></i>
+          </div></h5>
+        <p class="card-text" style="text-align: center;">The Arrival Time at Source <%=sourcestnArrival%>  is       <%=sourceArrTime%> </p>
+      </div>
+      <!-- <div class="card-footer">
+        <small class="text-muted" style="display: flex; justify-content: center; align-items: center;"><input id="source" type="text" name="travelSource" placeholder="Enter source" style="text-align: center;"></small>
+      </div> -->
+    </div>
+    <div class="card ">
+      <div class="card-body bg-dark text-light">
+      <h5 class="card-title"><div class="box" style="display: flex; justify-content: center; align-items: center;">
+  
+          <i class="fas fa-train fa-2x" ></i>
+          </div></h5>
+        <p class="card-text" style="text-align: center;">The Arrival Time at Destination <%=destinationstnArrival%>  is  <%=destinationArrTime%> </p>
+      </div>
     </div>
   </div>
   
-      
   
   
