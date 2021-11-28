@@ -4,6 +4,7 @@ const query = require("../config/query");
 const db = require("../config/sqlite3").db;
 const https = require("https");
 require("dotenv").config();
+let crimeDataa=[];
 
 // Render the welcome page
 module.exports.welcome = (req, res) => {
@@ -306,6 +307,7 @@ module.exports.submit = function (req, res) {
       let checkBoolean = " ";
       let sourceDestination = " ";
       let blueLine = " ";
+      let urlCrimes=" ";
 
       https.get(url, function (response) {
         // console.log(response.statusCode);
@@ -505,23 +507,65 @@ module.exports.submit = function (req, res) {
                                     break;
                                   }
                                 }
-                                console.log(
-                                  temp,
-                                  weatherDescripton,
-                                  sourceArrival,
-                                  query1,
-                                  stationName
-                                );
-                                return res.render("apiData", {
-                                  queryCity: query1,
-                                  queryTemperature: temp,
-                                  weatherDescriptonTemperature: weatherDescripton,
-                                  imageIcon: imageUrl,
-                                  sourcestnArrival: stationName,
-                                  sourceArrTime: sourceArrival,
-                                  destinationstnArrival: destinationName,
-                                  destinationArrTime: sourceDestination,
-                                });
+                                  //getting crime data
+                                  urlCrimes="https://data.cityofchicago.org/resource/ijzp-q8t2.json?$limit=12";
+                                  https.get(urlCrimes,function(response){
+                                    //console.log(response);
+                                    response.on("data",function(data){
+                                        const crimeData= JSON.parse(data);
+                                        // console.log(crimeData);
+                                        // crimeDataa=[];
+                                        // var crimeDat=[]
+                                        for (let i=0;i<=11;i++){
+                                          let obj = {};
+                                          obj.date = crimeData[i].date;
+                                          obj.primary_type=crimeData[i].primary_type;
+                                          obj.description=crimeData[i].description;
+                                          obj.block=crimeData[i].block;
+                                          //  console.log(crimeData[i].date);
+                                          //  console.log(crimeData[i].primary_type);
+                                          //  console.log(crimeData[i].description);
+                                          //  console.log(crimeData[i].block);
+                                          crimeDataa.push(obj);
+                                        }
+                                        console.log("printing crimedata");
+                                        console.log(crimeDataa);
+                                        return res.render("apiData", {
+                                          queryCity: query1,
+                                          queryTemperature: temp,
+                                          weatherDescriptonTemperature: weatherDescripton,
+                                          imageIcon: imageUrl,
+                                          sourcestnArrival: stationName,
+                                          sourceArrTime: sourceArrival,
+                                          destinationstnArrival: destinationName,
+                                          destinationArrTime: sourceDestination,
+                                          crimeDataa :crimeDataa
+                                        });
+                                        //console.log(" hi " + crimeDat);
+                                    })
+                                    // console.log(" hi " + crimeDat);
+                                })
+
+                                // console.log(
+                                //   temp,
+                                //   weatherDescripton,
+                                //   sourceArrival,
+                                //   query1,
+                                //   stationName
+                                // );
+                                // console.log("crimeDataaa printing")
+                                // console.log(crimeDataa);
+                                // return res.render("apiData", {
+                                //   queryCity: query1,
+                                //   queryTemperature: temp,
+                                //   weatherDescriptonTemperature: weatherDescripton,
+                                //   imageIcon: imageUrl,
+                                //   sourcestnArrival: stationName,
+                                //   sourceArrTime: sourceArrival,
+                                //   destinationstnArrival: destinationName,
+                                //   destinationArrTime: sourceDestination,
+                                //   crimeDataa :crimeDataa
+                                // });
                               });
                             });
                           });

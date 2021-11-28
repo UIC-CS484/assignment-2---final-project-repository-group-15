@@ -116,6 +116,38 @@
       </div>
     </div>
   </div>
+
+  <div class="card-group mx-auto" style="margin-top: 5rem; margin-bottom:  10rem ;" >
+    <div class="card"> 
+      <div class="card-body card bg-dark text-light">
+        
+        <h5 class="card-title"><div class="box" style="display: flex; justify-content: center; align-items: center;">
+  
+          <i class="fas fa-exclamation-triangle fa-2x"></i>
+          
+          
+          </div></h5>
+          <h3 style="text-align: center;">Public Advisory</h3>
+        <p class="card-text" style="text-align: center;">
+          
+          <% for(let item in crimeDataa){%>
+            <ul>
+           <li>the occurence of the incident was on  <%=crimeDataa[item].date%>, the type of incident was <%=crimeDataa[item].primary_type%>, the description of the event was <%=crimeDataa[item].description%>, the place of occurence was <%=crimeDataa[item].block%> </li> 
+            </ul>
+            <%}%>
+
+          
+
+            
+          <!-- Temperature in <%=queryCity%> is <%=queryTemperature%> degree celsius
+          weather description:  <%=weatherDescriptonTemperature%> 
+          <img src='<%=imageIcon%>'  > -->
+          
+        </p>
+      </div> 
+
+    </div>
+  </div>
   
   
   
