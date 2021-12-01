@@ -260,6 +260,9 @@ module.exports.submit = function (req, res) {
       let icon = " ";
       let weatherData = " ";
       let stationName = req.body.travelSource;
+      if(stationName == null || stationName==="")
+        return res.redirect('dashboard');
+    
 
       db.run(query.ADD_SEARCH, stationName, req.body.email, (dbErr, row) => {
         if (dbErr) {
@@ -273,7 +276,9 @@ module.exports.submit = function (req, res) {
       });
 
       let destinationName = req.body.travelDestination;
-
+      if(destinationName == null || destinationName==="")
+        return res.redirect('dashboard');
+        
       db.run(query.ADD_SEARCH, destinationName, req.body.email, (dbErr, row) => {
         if (dbErr) {
           errors.push({ msg: "couldn't add search" });
@@ -317,6 +322,9 @@ module.exports.submit = function (req, res) {
         // console.log(response.statusCode);
         response.on("data", function (data) {
           weatherData = JSON.parse(data);
+          if(weatherData==null||weatherData.main==null){
+            return res.redirect('dashboard');
+          }
           temp = weatherData.main.temp;
           weatherDescripton = weatherData.weather[0].description;
           icon = weatherData.weather[0].icon;
@@ -386,6 +394,7 @@ module.exports.submit = function (req, res) {
         https.get(urlSource, function (response) {
           response.on("data", function (data) {
             trainDataSource = JSON.parse(data);
+            
             //code to get mapid for blue=ture
             mapIdentiferSource = "";
             for (let index in trainDataSource) {
@@ -467,9 +476,19 @@ module.exports.submit = function (req, res) {
                           "&mapid=" +
                           mapIdDestination +
                           "&rt=blue&outputType=JSON";
+                          
                         https.get(url1Destination, function (response) {
                           response.on("data", function (data) {
+                            try{
                             getRndestination = JSON.parse(data); //using mapId from trainData to get route number(rn)
+                            } catch(err){
+                              throw err;
+                              // console.log("I am stuck");
+                              // return ;
+                            }
+                            // if(getRndestination==null){
+                            //   return res.redirect('dashboard');
+                            // }
                             //var routNumberdestination = " ";
                             for (let index in getRndestination.ctatt.eta) {
                               if (
