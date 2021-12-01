@@ -225,10 +225,10 @@ module.exports.submit = function (req, res) {
   try {
     if (req.isAuthenticated()) {
       const query1 = req.body.cityName;
-      if (err){
-        console.log("empty field");
-        return res.redirect('dashboard');
-      }
+      // if (err){
+      //   console.log("empty field");
+      //   return res.redirect('dashboard');
+      // }
 
       //add search to DB
       db.run(query.ADD_SEARCH, query1, req.body.email, (dbErr, row) => {
