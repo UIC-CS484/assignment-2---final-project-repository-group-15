@@ -3,8 +3,46 @@ const bcrypt = require("bcrypt");
 const query = require("../config/query");
 const db = require("../config/sqlite3").db;
 const https = require("https");
+const passwordValidator = require("password-validator");
 require("dotenv").config();
 let crimeDataa = [];
+
+// Password validator
+function isValidPassword(password) {
+  var schema = new passwordValidator();
+  schema
+    .is()
+    .min(6) // Minimum length 6
+    .is()
+    .max(30) // Maximum length 30
+    .has()
+    .uppercase() // Must have uppercase letters
+    .has()
+    .lowercase() // Must have lowercase letters
+    .has()
+    .digits(1) // Must have at least 1 digits
+    .has()
+    .not()
+    .spaces() // Should not have spaces
+    .is()
+    .not()
+    .oneOf([
+      "password",
+      "123456",
+      "abcdef",
+      "qwerty",
+      "111111",
+      "qwerty123",
+      "12345678",
+      "1234567890",
+      "1q2w3e",
+      "123456789",
+    ]); // Blacklist these values
+  if (!schema.validate(password)) {
+    return false;
+  }
+  return true;
+}
 
 // Render the welcome page
 module.exports.welcome = (req, res) => {
@@ -53,7 +91,6 @@ module.exports.notFound = (req, res) => {
       name: req.user.name,
     });
   }
-  req.flash("error_msg", "How did you found your self here?");
   return res.render("welcome.ejs");
 };
 
@@ -77,6 +114,13 @@ module.exports.createUser = (req, res) => {
   // Check password length
   if (password.length < 6) {
     errors.push({ msg: "Password should be at least 6 characters" });
+  }
+
+  // Password requirement check
+  if (!isValidPassword(password)) {
+    errors.push({
+      msg: "Password should contain alphanumeric and special charaters!",
+    });
   }
 
   if (errors.length > 0) {
@@ -188,6 +232,14 @@ module.exports.changePassword = (req, res) => {
   // Check passsword length
   if (newPass.length < 6) {
     errors.push({ msg: "Password should be at least 6 characters" });
+  }
+
+  // Password requirement checks
+  // Password requirement check
+  if (!isValidPassword(password)) {
+    errors.push({
+      msg: "Password should contain alphanumeric and special charaters!",
+    });
   }
 
   if (errors.length > 0) {
@@ -341,7 +393,7 @@ module.exports.submit = function (req, res) {
           temp = weatherData.main.temp;
           weatherDescripton = weatherData.weather[0].description;
           icon = weatherData.weather[0].icon;
-          imageUrl = "http://openweathermap.org/img/wn/" + icon + "@2x.png";
+          imageUrl = "https://openweathermap.org/img/wn/" + icon + "@2x.png";
           // res.write(" <h1>Temperature in " + query + " is: " + temp + " degree celsius</h1>");
           // res.write("<p>weather description : " + weatherDescripton + "</p>");
           // res.write("<img src=" + imageUrl + ">");
