@@ -31,11 +31,11 @@ function isValidPassword(password) {
       "123456",
       "abcdef",
       "qwerty",
-      "111111",
+      "abc123",
       "qwerty123",
       "12345678",
       "1234567890",
-      "1q2w3e",
+      "password123",
       "123456789",
     ]); // Blacklist these values
   if (!schema.validate(password)) {
