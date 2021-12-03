@@ -1,4 +1,4 @@
-# Transport Suggestion
+# Transport Suggestor
 
 ## Running the project
 - Download the application as Zip Folder or clone the repository
