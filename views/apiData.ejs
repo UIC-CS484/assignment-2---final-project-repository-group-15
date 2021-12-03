@@ -23,10 +23,10 @@
             class="dropdown-menu dropdown-menu-end dropdown-menu-lg-end"
             aria-labelledby="dropdown04"
           >
-            <li><a class="btn" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#updatePasswordModal" href="#">Account</a></li>
+          <li><a class="btn" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#updatePasswordModal" href="#">Change Password</a></li>
             <li>
               <a href="/users/delete" class="btn" class="dropdown-item"
-                >Modify Account</a
+                >Delete Account</a
               >
             </li>
             <li>
@@ -40,7 +40,46 @@
     </div>
   </div>
 </nav>
-
+<!--Modal for Password change-->
+<div
+  class="modal fade"
+  id="updatePasswordModal"
+  tabindex="-1"
+  aria-labelledby="updatePasswordModal"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updatePasswordModal">Change Password</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <form action="/users/change-password" method="post">
+        <div class="modal-body">
+          
+            <div class="mb-3">
+              <label for="new-password" class="col-form-label"
+                >New Password</label
+              >
+              <input type="password" minlength="6" class="form-control" id="newPassword" name="newPassword" />
+            </div>
+          
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Update Password</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Close
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 <!-- <div class="card border-primary mb-3" style="max-width: 18rem;">
      <div class="card-header">Header</div>
     <div class="card-body text-primary">
