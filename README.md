@@ -1,36 +1,150 @@
 # Transport Suggestor
 
-## Running the project
+## Team 15 Fall-2021
 
+## Objective
+-  Our website is available at https://transport-suggester.herokuapp.com/
+- Our website aims at providing users who wish to travel with accurate weather data, arrival and drop off times at various blue line CTA subway stations and list of recent public advisories in Chicago which helps the user to make an informed desicion whether to take a particular route or not.
+
+## Team member role's and bio
+* Frontend(UI),Backend,Database- Asif Iqbal Gazi
+
+* API Calling, Frontend(UI),Testing-Sai Nirmal Morampudi
+
+* Testing,Database-Zainab Mohammad
+
+
+## API Calling and Snippets
+- We are making calls to few API to get data regarding, weather and arrival time of various CTA blue line trains. We are getting the the weather data from OpenWeatherMap API.
+- The user will input the station he/she is at and the station the user wants to visit and will hit the submit button. Then will display the arrival and drop off times for that route. The user can also find weather description,temperature  of a particualr city.
+- example use cases can be source: UIC-Halsted, destination:LaSalle or source: Washington, destination:Grand and so on.
+- We are also displaying most recenlty reported Crime Data
+- Below are code snippets  for the weather, Public advisory and CTA API calls
+-       const wAPIKey = process.env.WEATHER_API_KEY;
+      console.log(wAPIKey);
+      //const appKey = "06a1dc9b9a352e1c0603985edec712d4";
+      const measureUnits = "metric";
+      const url =
+        "https://api.openweathermap.org/data/2.5/weather?" +
+        "q=" +
+        query1 +
+        "&appid=" +
+        wAPIKey +
+        "&units=" +
+        measureUnits;
+      let temp = "";
+      let weatherDescripton = " ";
+      let imageUrl = " ";
+      let icon = " ";
+      let weatherData = " ";
+      let stationName = req.body.travelSource;
+      if(stationName == null || stationName==="")
+        return res.redirect('dashboard');
+   Crime API code
+-         urlCrimes="https://data.cityofchicago.org/resource/ijzp-q8t2.json?$limit=12";<br>
+                                  https.get(urlCrimes,function(response){<br>
+                                    response.on("data",function(data){<br>
+                                        const crimeData= JSON.parse(data);<br>
+                                        for (let i=0;i<=11;i++){<br>
+                                          let obj = {};<br>
+                                          obj.date = crimeData[i].date;<br>
+                                          obj.primary_type=crimeData[i].primary_type;<br>
+                                          obj.description=crimeData[i].description;<br>
+                                          obj.block=crimeData[i].block;<br>
+                                          crimeDataa.push(obj);<br>
+                                        }<br>
+- Entire CTA API code is not being displayed over here as its quite big
+
+         if (blueLine.indexOf(stationName) > blueLine.indexOf(destinationName)) {
+          //res.write("");
+          trDr = 5;
+        } else {
+          trDr = 1;
+          //res.write("");
+        }
+
+        urlSource =
+          "https://data.cityofchicago.org/resource/8pix-ypme.json?" +
+          "station_name=" +
+          stationName;
+        https.get(urlSource, function (response) {
+          response.on("data", function (data) {
+            trainDataSource = JSON.parse(data);
+
+            //code to get mapid for blue=ture
+            mapIdentiferSource = "";
+            for (let index in trainDataSource) {
+              if (trainDataSource[index].blue) {
+                mapIdentiferSource = trainDataSource[index].map_id;
+                //res.write(trainData[index].map_id);
+                break;
+              }
+            }
+            mapIdSource = mapIdentiferSource; //Identifying Mapid
+
+            // getting destination map id
+            urlDestination =
+              "https://data.cityofchicago.org/resource/8pix-ypme.json?" +
+              "station_name=" +
+              destinationName;
+            https.get(urlDestination, function (response) {
+              response.on("data", function (data) {
+                trainDataDestination = JSON.parse(data);
+                //code to get mapid for blue=ture
+                mapIdentiferDestination = "";
+                for (let index in trainDataDestination) {
+                  if (trainDataDestination[index].blue) {
+                    mapIdentiferDestination = trainDataDestination[index].map_id;
+                    //res.write(trainData[index].map_id);
+                    break;
+                  }
+                }
+                mapIdDestination = mapIdentiferDestination; //ends here
+                //console.log(mapIdDestination);
+
+## Running the project 
+- URL link to the website https://transport-suggester.herokuapp.com/
+
+   Requirements for running the app locally
+* node.js
+* npm
 - Download the application as Zip Folder or clone the repository
-- goto app.js file, to install the dependencies use
-
+- goto app.js file, to install the dependencies use 
 ```
  npm install
+ 
 ```
-
 - then to start the server issue the following command
-
 ```
-npm start
+npm run dev
 ```
-
 - once the server is running go to http://localhost:3000/
 
 ## CRUD Functionalities
 
 - CRUD functionalities like modifying password and deleting user account have been implemented.
 
+## Tools and Resources
+
+### Tools
+- VScode for code creation and editing
+- Git
+- Postman
+
+### Resources
+- Docker
+- sqlite3
+- passport.js
+- Express.js
+- Ejs
+- node.js
+ 
+
 ## ERD Diagram
 
 <img width="393" alt="database" src="https://user-images.githubusercontent.com/40325698/142331723-dee419e4-00e2-4725-8629-ddfc27af19b0.PNG">
 - Bolded attributes are NOT-NULL, non-bolded attributes may be NULL.
 
-## API Calling
-
-- We are making calls to few API to get data regarding, weather and arrival time of various CTA blue line trains. We are getting the the weather data from OpenWeatherMap API.
-- The user will input the station he/she is at and the station the user wants to visit and will hit the submit button. Then will display the arrival and drop off times for that route. The user can also find weather description,temperature of a particualr city.
-- example use cases can be source: UIC-Halsted, destination:LaSalle or source: Washington, destination:Grand and so on.
 
 ## Charts
 
