@@ -22,7 +22,6 @@
 - Below are code snippets  for the weather, Public advisory and CTA API calls
 -       const wAPIKey = process.env.WEATHER_API_KEY;
       console.log(wAPIKey);
-      //const appKey = "06a1dc9b9a352e1c0603985edec712d4";
       const measureUnits = "metric";
       const url =
         "https://api.openweathermap.org/data/2.5/weather?" +
