@@ -1,4 +1,86 @@
-<div>
+<nav
+class="navbar fixed-top navbar-expand-md navbar-light"
+style="background-color: #c7626a"
+aria-label="Fourth navbar example"
+>
+<div class="container-fluid">
+  <a class="navbar-brand" href="/users/submit">  Back to Search </a>
+
+  <div class="expand navbar-expand-md" id="navbarsExample04">
+    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+      <li class="nav-item dropdown">
+        <a
+          class="nav-link dropdown-toggle"
+          href="#"
+          id="dropdown04"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+          style="margin-right: 3rem"
+          >Options</a
+        >
+        <ul
+          class="dropdown-menu dropdown-menu-end dropdown-menu-lg-end"
+          aria-labelledby="dropdown04"
+        >
+          <li><a class="btn" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#updatePasswordModal" href="#">Change Password</a></li>
+          <li>
+            <a href="/users/delete" class="btn" class="dropdown-item"
+              >Delete Account</a
+            >
+          </li>
+          <li>
+            <a href="/users/logout" class="btn" class="dropdown-item"
+              >Logout</a
+            >
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+</nav>
+<!--Modal for Password change-->
+<div
+class="modal fade"
+id="updatePasswordModal"
+tabindex="-1"
+aria-labelledby="updatePasswordModal"
+aria-hidden="true"
+>
+<div class="modal-dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="updatePasswordModal">Change Password</h5>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="modal"
+        aria-label="Close"
+      ></button>
+    </div>
+    <form action="/users/change-password" method="post">
+      <div class="modal-body">
+        
+          <div class="mb-3">
+            <label for="new-password" class="col-form-label"
+              >New Password</label
+            >
+            <input type="password" minlength="6" class="form-control" id="newPassword" name="newPassword" />
+          </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Update Password</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+</div>
+
+<div style="padding-top: 100px;">
     <div class="chart-1">
       <canvas id="myChart1" style="width:200%;max-width:700px"></canvas>
     </div>
