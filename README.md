@@ -148,6 +148,9 @@ npm start
 ## Charts
 
 - In charting we are trying to display minimum and maximum temperature of Chicago for next Seven from current date as this is also factor that is considered while travelling to someplace.
+<img width="577" alt="Chart-1" src="https://user-images.githubusercontent.com/90991188/144639834-701acfac-e446-4d5f-bd18-3f54a957815e.PNG">
+<img width="560" alt="max Chart" src="https://user-images.githubusercontent.com/90991188/144639905-f75956a8-6943-45ee-a226-db07936683c4.PNG">
+
 
 ## Testing
 
@@ -156,7 +159,7 @@ Unit tests will be written for most forms of user input. Whenever functionality 
 - for testing use the command
 
 ```
-npm test
+npm run test
 ```
 
 - The first two tests check password length, and make sure it is at least 6 characters long.
@@ -164,7 +167,7 @@ npm test
 - The next two check for an @ character in an email.
 - Finally, the last two ensure that the email has a valid ending, such as ".com".
 
-In future iterations, additional tests may test inputs in various ways against a database of user information. Tests may also check if the implentation of APIs is being performed correctly.
+
 
 ## Team Members
 
