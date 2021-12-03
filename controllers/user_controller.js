@@ -4,7 +4,7 @@ const query = require("../config/query");
 const db = require("../config/sqlite3").db;
 const https = require("https");
 require("dotenv").config();
-let crimeDataa=[];
+let crimeDataa = [];
 
 // Render the welcome page
 module.exports.welcome = (req, res) => {
@@ -142,8 +142,8 @@ module.exports.createSession = (req, res, next) => {
       return res.redirect("/users/dashboard");
     }
     res.redirect("/users/login");
-  };
-}
+  }
+};
 
 // Logout handle
 module.exports.logout = (req, res) => {
@@ -244,7 +244,6 @@ module.exports.submit = function (req, res) {
 
       const wAPIKey = process.env.WEATHER_API_KEY;
       console.log(wAPIKey);
-      //const appKey = "06a1dc9b9a352e1c0603985edec712d4";
       const measureUnits = "metric";
       const url =
         "https://api.openweathermap.org/data/2.5/weather?" +
@@ -260,35 +259,49 @@ module.exports.submit = function (req, res) {
       let icon = " ";
       let weatherData = " ";
       let stationName = req.body.travelSource;
-      if(stationName == null || stationName==="")
-        return res.redirect('dashboard');
-    
+      if (stationName == null || stationName === "")
+        return res.redirect("dashboard");
 
       db.run(query.ADD_SEARCH, stationName, req.body.email, (dbErr, row) => {
         if (dbErr) {
           errors.push({ msg: "couldn't add search" });
         }
       });
-      db.run(query.ADD_SEARCHCOUNT, stationName, req.body.email, (dbErr, row) => {
-        if (dbErr) {
-          errors.push({ msg: "couldn't increment search count" });
+      db.run(
+        query.ADD_SEARCHCOUNT,
+        stationName,
+        req.body.email,
+        (dbErr, row) => {
+          if (dbErr) {
+            errors.push({ msg: "couldn't increment search count" });
+          }
         }
-      });
+      );
 
       let destinationName = req.body.travelDestination;
-      if(destinationName == null || destinationName==="")
-        return res.redirect('dashboard');
-        
-      db.run(query.ADD_SEARCH, destinationName, req.body.email, (dbErr, row) => {
-        if (dbErr) {
-          errors.push({ msg: "couldn't add search" });
+      if (destinationName == null || destinationName === "")
+        return res.redirect("dashboard");
+
+      db.run(
+        query.ADD_SEARCH,
+        destinationName,
+        req.body.email,
+        (dbErr, row) => {
+          if (dbErr) {
+            errors.push({ msg: "couldn't add search" });
+          }
         }
-      });
-      db.run(query.ADD_SEARCHCOUNT, destinationName, req.body.email, (dbErr, row) => {
-        if (dbErr) {
-          errors.push({ msg: "couldn't increment search count" });
+      );
+      db.run(
+        query.ADD_SEARCHCOUNT,
+        destinationName,
+        req.body.email,
+        (dbErr, row) => {
+          if (dbErr) {
+            errors.push({ msg: "couldn't increment search count" });
+          }
         }
-      });
+      );
 
       let trDr = 0;
       let urlSource = "";
@@ -316,14 +329,14 @@ module.exports.submit = function (req, res) {
       let checkBoolean = " ";
       let sourceDestination = " ";
       let blueLine = " ";
-      let urlCrimes=" ";
+      let urlCrimes = " ";
 
       https.get(url, function (response) {
         // console.log(response.statusCode);
         response.on("data", function (data) {
           weatherData = JSON.parse(data);
-          if(weatherData==null||weatherData.main==null){
-            return res.redirect('dashboard');
+          if (weatherData == null || weatherData.main == null) {
+            return res.redirect("dashboard");
           }
           temp = weatherData.main.temp;
           weatherDescripton = weatherData.weather[0].description;
@@ -378,7 +391,6 @@ module.exports.submit = function (req, res) {
           "O'Hare",
         ];
 
-
         if (blueLine.indexOf(stationName) > blueLine.indexOf(destinationName)) {
           //res.write("");
           trDr = 5;
@@ -394,7 +406,7 @@ module.exports.submit = function (req, res) {
         https.get(urlSource, function (response) {
           response.on("data", function (data) {
             trainDataSource = JSON.parse(data);
-            
+
             //code to get mapid for blue=ture
             mapIdentiferSource = "";
             for (let index in trainDataSource) {
@@ -418,7 +430,8 @@ module.exports.submit = function (req, res) {
                 mapIdentiferDestination = "";
                 for (let index in trainDataDestination) {
                   if (trainDataDestination[index].blue) {
-                    mapIdentiferDestination = trainDataDestination[index].map_id;
+                    mapIdentiferDestination =
+                      trainDataDestination[index].map_id;
                     //res.write(trainData[index].map_id);
                     break;
                   }
@@ -476,12 +489,12 @@ module.exports.submit = function (req, res) {
                           "&mapid=" +
                           mapIdDestination +
                           "&rt=blue&outputType=JSON";
-                          
+
                         https.get(url1Destination, function (response) {
                           response.on("data", function (data) {
-                            try{
-                            getRndestination = JSON.parse(data); //using mapId from trainData to get route number(rn)
-                            } catch(err){
+                            try {
+                              getRndestination = JSON.parse(data); //using mapId from trainData to get route number(rn)
+                            } catch (err) {
                               throw err;
                               // console.log("I am stuck");
                               // return ;
@@ -501,7 +514,8 @@ module.exports.submit = function (req, res) {
                             }
                             rnTrainDestination = routNumberdestination; //getting route number[0] as the earliest train's r is displayed first
                             console.log(
-                              " The train RN are looking for " + rnTrainDestination
+                              " The train RN are looking for " +
+                                rnTrainDestination
                             );
                             //get destination arrival time
                             urlDesat =
@@ -516,10 +530,11 @@ module.exports.submit = function (req, res) {
                                 arrivalDestination = JSON.parse(data);
                                 checkBoolean = false;
                                 sourceDestination = "not available as of now";
-                                for (let index in arrivalDestination.ctatt.eta) {
+                                for (let index in arrivalDestination.ctatt
+                                  .eta) {
                                   if (
-                                    arrivalDestination.ctatt.eta[index].staNm ===
-                                    destinationName
+                                    arrivalDestination.ctatt.eta[index]
+                                      .staNm === destinationName
                                   ) {
                                     sourceDestination =
                                       arrivalDestination.ctatt.eta[index].arrT;
@@ -530,44 +545,48 @@ module.exports.submit = function (req, res) {
                                     break;
                                   }
                                 }
-                                  //getting crime data
-                                  urlCrimes="https://data.cityofchicago.org/resource/ijzp-q8t2.json?$limit=12";
-                                  https.get(urlCrimes,function(response){
-                                    //console.log(response);
-                                    response.on("data",function(data){
-                                        const crimeData= JSON.parse(data);
-                                        // console.log(crimeData);
-                                        // crimeDataa=[];
-                                        // var crimeDat=[]
-                                        for (let i=0;i<=11;i++){
-                                          let obj = {};
-                                          obj.date = crimeData[i].date;
-                                          obj.primary_type=crimeData[i].primary_type;
-                                          obj.description=crimeData[i].description;
-                                          obj.block=crimeData[i].block;
-                                          //  console.log(crimeData[i].date);
-                                          //  console.log(crimeData[i].primary_type);
-                                          //  console.log(crimeData[i].description);
-                                          //  console.log(crimeData[i].block);
-                                          crimeDataa.push(obj);
-                                        }
-                                        console.log("printing crimedata");
-                                        console.log(crimeDataa);
-                                        return res.render("apiData", {
-                                          queryCity: query1,
-                                          queryTemperature: temp,
-                                          weatherDescriptonTemperature: weatherDescripton,
-                                          imageIcon: imageUrl,
-                                          sourcestnArrival: stationName,
-                                          sourceArrTime: sourceArrival,
-                                          destinationstnArrival: destinationName,
-                                          destinationArrTime: sourceDestination,
-                                          crimeDataa :crimeDataa
-                                        });
-                                        //console.log(" hi " + crimeDat);
-                                    })
-                                    // console.log(" hi " + crimeDat);
-                                })
+                                //getting crime data
+                                urlCrimes =
+                                  "https://data.cityofchicago.org/resource/ijzp-q8t2.json?$limit=12";
+                                https.get(urlCrimes, function (response) {
+                                  //console.log(response);
+                                  response.on("data", function (data) {
+                                    const crimeData = JSON.parse(data);
+                                    // console.log(crimeData);
+                                    // crimeDataa=[];
+                                    // var crimeDat=[]
+                                    for (let i = 0; i <= 11; i++) {
+                                      let obj = {};
+                                      obj.date = crimeData[i].date;
+                                      obj.primary_type =
+                                        crimeData[i].primary_type;
+                                      obj.description =
+                                        crimeData[i].description;
+                                      obj.block = crimeData[i].block;
+                                      //  console.log(crimeData[i].date);
+                                      //  console.log(crimeData[i].primary_type);
+                                      //  console.log(crimeData[i].description);
+                                      //  console.log(crimeData[i].block);
+                                      crimeDataa.push(obj);
+                                    }
+                                    console.log("printing crimedata");
+                                    console.log(crimeDataa);
+                                    return res.render("apiData", {
+                                      queryCity: query1,
+                                      queryTemperature: temp,
+                                      weatherDescriptonTemperature:
+                                        weatherDescripton,
+                                      imageIcon: imageUrl,
+                                      sourcestnArrival: stationName,
+                                      sourceArrTime: sourceArrival,
+                                      destinationstnArrival: destinationName,
+                                      destinationArrTime: sourceDestination,
+                                      crimeDataa: crimeDataa,
+                                    });
+                                    //console.log(" hi " + crimeDat);
+                                  });
+                                  // console.log(" hi " + crimeDat);
+                                });
 
                                 // console.log(
                                 //   temp,
@@ -605,9 +624,8 @@ module.exports.submit = function (req, res) {
         // return res.render("apiData", { queryCity: query, queryTemperature: temp, weatherDescriptonTemperature: weatherDescripton, imageIcon: imageUrl, sourcestnArrival: stationName, sourceArrTime: sourceArrival, destinationstnArrival: destinationName, destinationArrTime: sourceDestination });
       });
     }
+  } catch (err) {
+    console.log("Couldnt get the data as of now");
+    return res.redirect("dashboard");
   }
-  catch (err) {
-    console.log('Couldnt get the data as of now');
-    return res.redirect('dashboard');
-  }
-}
+};
