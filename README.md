@@ -115,7 +115,7 @@
 ```
 - then to start the server issue the following command
 ```
-npm run dev
+npm start
 ```
 - once the server is running go to http://localhost:3000/
 
@@ -156,7 +156,7 @@ Unit tests will be written for most forms of user input. Whenever functionality 
 - for testing use the command
 
 ```
-npm start
+npm test
 ```
 
 - The first two tests check password length, and make sure it is at least 6 characters long.
