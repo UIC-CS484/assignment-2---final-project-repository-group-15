@@ -29,6 +29,7 @@
     "express-session": "^1.17.2",
     "passport": "^0.5.0",
     "passport-local": "^1.0.0",
+    "password-validator": "^5.2.1",
     "sqlite": "^4.0.23",
     "sqlite3": "^5.0.2"
   },
